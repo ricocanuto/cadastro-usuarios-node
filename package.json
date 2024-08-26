@@ -1,0 +1,21 @@
+{
+  "name": "cadastro-usuarios-node",
+  "version": "1.0.0",
+  "description": "API cadastro de usuarios",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch server.js"
+  },
+  "author": "Ricardo Canuto",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^5.17.0",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "mongodb": "^6.8.0"
+  },
+  "devDependencies": {
+    "prisma": "^5.17.0"
+  }
+}
