@@ -1,60 +1,55 @@
-import express from 'express'
-import cors from 'cors'
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from "@prisma/client";
+import cors from "cors";
+import express from "express";
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
-const app = express()
+const app = express();
 
-app.use(express.json())
-app.use(cors())
+app.use(express.json());
+app.use(cors());
 
+app.get("/usuarios", async (_request, response) => {
+  const users = await prisma.user.findMany();
 
-app.get('/usuarios', async (request, response) => {
+  response.status(200).json(users);
+});
 
-    const users = await prisma.user.findMany()
+app.post("/usuarios", async (request, response) => {
+  const user = await prisma.user.create({
+    data: {
+      email: request.body.email,
+      age: parseInt(request.body.age, 10),
+      name: request.body.name,
+    },
+  });
 
-    response.status(200).json(users)
-})
+  response.status(201).json(user);
+});
 
-app.post('/usuarios', async (request, response) => {
+app.put("/usuarios/:id", async (request, response) => {
+  const user = await prisma.user.update({
+    where: {
+      id: request.params.id,
+    },
+    data: {
+      email: request.body.email,
+      age: parseInt(request.body.age, 10),
+      name: request.body.name,
+    },
+  });
+  response.status(201).json(user);
+});
 
-    const user = await prisma.user.create({
-        data: {
-            email: request.body.email,
-            age: parseInt(request.body.age),
-            name: request.body.name
-        }
-    })
-
-    response.status(201).json(user)
-})
-
-app.put('/usuarios/:id', async (request, response) => {
-
-    const user = await prisma.user.update({
-        where: {
-            id: request.params.id
-        },
-        data: {
-            email: request.body.email,
-            age: parseInt(request.body.age),
-            name: request.body.name
-        }
-    })
-    response.status(201).json(user)
-})
-
-app.delete('/usuarios/:id', async (request, response) => {
-    await prisma.user.delete({
-        where: {
-            id: request.params.id
-        },
-    })
-    response.status(200).json({ message: 'Usuario deletado com sucesso!' })
-})
+app.delete("/usuarios/:id", async (request, response) => {
+  await prisma.user.delete({
+    where: {
+      id: request.params.id,
+    },
+  });
+  response.status(200).json({ message: "Usuario deletado com sucesso!" });
+});
 
 app.listen(3000, () => {
-    console.log('Server is running on port 3000')
-})
-
+  console.log("Server is running on port 3000");
+});
